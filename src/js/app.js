@@ -2,6 +2,9 @@ import { cars } from './cars';
 
 let yearSelector;
 let makeSelector;
+let minSelector;
+let maxSelector;
+let doorsSelector;
 let container;
 let searchFields = {
 	make: '',
@@ -17,6 +20,9 @@ function findElements() {
 	makeSelector = document.querySelector('#make');
 	yearSelector = document.querySelector('#year');
 	container = document.querySelector('#result');
+	minSelector = document.querySelector('#min');
+	maxSelector = document.querySelector('#max');
+	doorsSelector = document.querySelector('#doors');
 }
 
 function createYearSelect() {
@@ -36,7 +42,15 @@ function getCars() {
 	return data;
 }
 
+function clearLayout() {
+	container = document.querySelector('#result');
+	while(container.firstChild) {
+		container.removeChild(container.firstChild);
+	}
+}
+
 function showCars(cars) {
+	clearLayout();
 	cars.forEach( car => {
 		const carHTML = document.createElement('p');
 		carHTML.innerHTML = `
@@ -47,8 +61,13 @@ function showCars(cars) {
 }
 
 function filterCars() {
-	const result = getCars().filter(filterMake).filter(filterYear);
-	console.log(result)
+	const result = getCars().filter(filterMake).filter(filterYear).filter(filterMin).filter(filterMax).filter(filterDoors);
+		if(result.length) {
+			showCars(result);
+		}
+		else {
+			alert('No results found');
+		}
 }
 
 function filterMake(car) {
@@ -62,13 +81,40 @@ function filterMake(car) {
 
 function filterYear(car) {
 	if(searchFields.year) {
-		console.log(car)
 		return car.year === searchFields.year;
 	}
 	else {
 		return car;
 	}
 }
+
+function filterMin(car) {
+	if(searchFields.min) {
+		return car.price >= searchFields.min;
+	}
+	else {
+		return car;
+	}doors
+}
+
+function filterMax(car) {
+	if(searchFields.max) {
+		return car.price <= searchFields.max;
+	}
+	else {
+		return car;
+	}
+}
+
+function filterDoors(car) {
+	if(searchFields.doors) {
+		return car.doors <= searchFields.doors;
+	}
+	else {
+		return car;
+	}
+}
+
 
 
 function make(event) {
@@ -78,11 +124,29 @@ function make(event) {
 }
 
 function year(event) {
-	console.log(1)
 	const { target } = event;
 	searchFields.year = Number(target.value);
 	filterCars();
 }
+
+ function minPrice(event) {
+	const { target } = event;
+	searchFields.min = Number(target.value);
+	filterCars();
+}
+
+ function maxPrice(event) {
+	const { target } = event;
+	searchFields.max = Number(target.value);
+	filterCars();
+}
+
+function doors(event) {
+const { target } = event;
+	searchFields.doors = Number(target.value);
+	filterCars();
+}
+
 
 
 function onLoad() {
@@ -95,6 +159,9 @@ function subscribe() {
 	document.addEventListener('DOMContentLoaded', onLoad);
 	makeSelector.addEventListener('input', make);
 	yearSelector.addEventListener('input', year);
+	minSelector.addEventListener('input', minPrice);
+	maxSelector.addEventListener('input', maxPrice);
+	doorsSelector.addEventListener('input', doors);
 }
 
 
