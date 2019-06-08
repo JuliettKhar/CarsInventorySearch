@@ -64,13 +64,21 @@ function showCars(cars) {
 	});
 }
 
+function noResults() {
+	clearLayout();
+	const noResults = document.createElement('div');
+	noResults.classList.add('alert', 'error');
+	noResults.appendChild(document.createTextNode('No results found'));
+	container.appendChild(noResults);
+}
+
 function filterCars() {
 	const result = getCars().filter(filterMake).filter(filterYear).filter(filterMin).filter(filterMax).filter(filterDoors).filter(filterTransmission).filter(filterColor);
 		if(result.length) {
 			showCars(result);
 		}
 		else {
-			alert('No results found');
+			noResults();
 		}
 }
 
@@ -137,9 +145,6 @@ function filterColor(car) {
 	}
 }
 
-
-
-
 function make(event) {
 	const { target } = event;
 	searchFields.make = target.value;
@@ -177,7 +182,6 @@ function transmission(event) {
 }
 
 function color(event) {
-	console.log(1)
 	const { target } = event;
 	searchFields.color = target.value;
 	filterCars();
