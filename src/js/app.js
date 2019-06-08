@@ -5,6 +5,8 @@ let makeSelector;
 let minSelector;
 let maxSelector;
 let doorsSelector;
+let transmissionSelector;
+let colorSelector;
 let container;
 let searchFields = {
 	make: '',
@@ -23,6 +25,8 @@ function findElements() {
 	minSelector = document.querySelector('#min');
 	maxSelector = document.querySelector('#max');
 	doorsSelector = document.querySelector('#doors');
+	transmissionSelector = document.querySelector('#transmission');
+	colorSelector = document.querySelector('#color');
 }
 
 function createYearSelect() {
@@ -61,7 +65,7 @@ function showCars(cars) {
 }
 
 function filterCars() {
-	const result = getCars().filter(filterMake).filter(filterYear).filter(filterMin).filter(filterMax).filter(filterDoors);
+	const result = getCars().filter(filterMake).filter(filterYear).filter(filterMin).filter(filterMax).filter(filterDoors).filter(filterTransmission).filter(filterColor);
 		if(result.length) {
 			showCars(result);
 		}
@@ -108,12 +112,31 @@ function filterMax(car) {
 
 function filterDoors(car) {
 	if(searchFields.doors) {
-		return car.doors <= searchFields.doors;
+		return car.doors === searchFields.doors;
 	}
 	else {
 		return car;
 	}
 }
+
+function filterTransmission(car) {
+	if(searchFields.transmission) {
+		return car.transmission === searchFields.transmission;
+	}
+	else {
+		return car;
+	}
+}
+
+function filterColor(car) {
+	if(searchFields.color) {
+		return car.color === searchFields.color;
+	}
+	else {
+		return car;
+	}
+}
+
 
 
 
@@ -147,6 +170,19 @@ const { target } = event;
 	filterCars();
 }
 
+function transmission(event) {
+	const { target } = event;
+	searchFields.transmission = target.value;
+	filterCars();
+}
+
+function color(event) {
+	console.log(1)
+	const { target } = event;
+	searchFields.color = target.value;
+	filterCars();
+}
+
 
 
 function onLoad() {
@@ -162,6 +198,9 @@ function subscribe() {
 	minSelector.addEventListener('input', minPrice);
 	maxSelector.addEventListener('input', maxPrice);
 	doorsSelector.addEventListener('input', doors);
+	transmissionSelector.addEventListener('input', transmission);
+	colorSelector.addEventListener('input', color);
+
 }
 
 
